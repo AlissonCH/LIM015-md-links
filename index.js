@@ -1,48 +1,45 @@
 
 const fs = require('fs'); // usando modulos COMMONJS
 const path = require('path');
+const markDownIt = require('markdown-it');
+const markdownLinkExtractor = require('markdown-link-extractor');
 
 function toPathAbsolute (pathParameter) {
+  // console.log(pathParameter)
+  let newPath;
+  Array.isArray(pathParameter) ? newPath = pathParameter[2] : newPath = pathParameter; // si entra como argumento de consola es un array
+
   let pathAbsolute;
-  if (path.isAbsolute(pathParameter)){
-    // console.log('path es absoluto');
-    let { root, dir, base, ext , name} = path.parse(pathParameter);
+  if (path.isAbsolute(newPath)){ // path es absoluto
+    let { root, dir, base, ext , name} = path.parse(newPath);
     ext===''? ext='.md': ext;
     base = name + ext;
     pathAbsolute = path.join(dir,base);
 
-  } else if (path.isAbsolute(pathParameter)===false){
-
-    // console.log('path es relativo');
+  } else if (path.isAbsolute(newPath)===false){ // path es relativo 
     const cwd = process.cwd(); //path.dirname(__filename);
-    let { root, dir, base, ext, name} = path.parse(pathParameter);
+    let { root, dir, base, ext, name} = path.parse(newPath);
     (ext==='')? ext='.md' : ext
     base = name + ext;
-    // console.log(path.parse(pathParameter));
     (dir!=='') 
     ? pathAbsolute = path.join(dir,base) 
-    : pathAbsolute = path.join(cwd,base);
-  } else {
-  //  console.log('path es otra cosa');
-  //   const [ , ,pathInput] = pathParameter;
-  //   console.log(pathInput);
-  //   const normalize = path.normalize(pathInput)
-  //   console.log(normalize);
+    : pathAbsolute = path.join(cwd,base); 
+  } else { // path es un directorio
+    console.log('path es otra cosa');
   }
   console.log(pathAbsolute);
   return pathAbsolute;
 }
 
+function extractLinks(fyle){
+  // const md = new markDownIt();
+  // const result = md.render(fyle);
+  const links = markdownLinkExtractor(fyle, true);
+  links.forEach(link=>console.log(link))
+}
 
 // module.exports = () => {
   const mdLinks = (pathParameter, options = false) => {
-    // toPathAbsolute(pathParameter);
-    // console.log(toPathAbsolute(pathParameter));
-    // console.log(dir);
-    // console.log(pathObject);
-    
-      //validation path si existe
-      // return Boolean
     
     /*const arrayOfLinks = () => {
       const array = new Array;
@@ -60,28 +57,17 @@ function toPathAbsolute (pathParameter) {
         }
 
     }*/
-    //path existe? valor true o false
-    // function convertir ruta relativas a absolutas
     // leer documento readme y extraer links y text y ponerlos en un array;
     // agregar el file dentro de cada objeto del arrayOfLinks
     // function status de cada link
     // arrayOfLinks.push({file:path});
     // options.validate sea true analizar cada link http y pushear el status dentro de un arrayOfLinks
-
-    // path = process.argv //obtener parametros desde CLI
-    // console.log(path)
-    // const [ ,arg2,arg3] = process.argv;
-    // console.log(arg2);
-    // console.log(arg3);
-    // const rootPath = path.dirname(arg2);
-    // console.log(rootPath);
-    // const [...rest] = arg2.split('\\');
     return new Promise( (resolve, reject) => {
       fs.readFile(toPathAbsolute(pathParameter), 'utf-8', (error, fyle) => {
         if(error){
           reject(`ERROR AL LEER RUTA ${error}`);
         }else{
-          resolve('el archivo se lee ok');
+          resolve(extractLinks(fyle));
         } 
       })
     })
@@ -91,17 +77,19 @@ function toPathAbsolute (pathParameter) {
 mdLinks('..\\LIM015-cipher\\readme.md', {validate: true}) // path relativo print: ..\LIM015-cipher\readme.md
     .then(links => console.log(links))
     .catch(console.error);
-mdLinks('readme.md', {validate: true}) // path relativo print: C:\Users\aliss\Desktop\Proyectos-laboratoria\LIM015-md-links\readme.md
-    .then(links => console.log(links))
-    .catch(console.error);  
-mdLinks('./readme', {validate: true}) // path relativo a su propio directorio print: readme.md
-    .then(links => console.log(links))
-    .catch(console.error);  
-mdLinks('C:\\Users\\aliss\\Desktop\\Proyectos-laboratoria\\LIM015-card-validation\\readme', {validate: true}) // path absoluto C:\Users\aliss\Desktop\Proyectos-laboratoria\LIM015-card-validation\readme.md
-    .then(links => console.log(links))
-    .catch(console.error);  
-mdLinks('C:/Users/aliss/Desktop/Proyectos-laboratoria/LIM015-card-validation/readme.md', {validate: true}) // path absoluto C:\Users\aliss\Desktop\Proyectos-laboratoria\LIM015-card-validation\readme.md
-    .then(links => console.log(links))
-    .catch(console.error);  
-
+// mdLinks('readme.md', {validate: true}) // path relativo print: C:\Users\aliss\Desktop\Proyectos-laboratoria\LIM015-md-links\readme.md
+//     .then(links => console.log(links))
+//     .catch(console.error);  
+// mdLinks('./readme', {validate: true}) // path relativo a su propio directorio print: readme.md
+//     .then(links => console.log(links))
+//     .catch(console.error);  
+// mdLinks('C:\\Users\\aliss\\Desktop\\Proyectos-laboratoria\\LIM015-card-validation\\readme', {validate: true}) // path absoluto C:\Users\aliss\Desktop\Proyectos-laboratoria\LIM015-card-validation\readme.md
+//     .then(links => console.log(links))
+//     .catch(console.error);  
+// mdLinks('C:\\Users\\aliss\\Desktop\\proyecto prueba\\readme', {validate: true}) // path absoluto C:\Users\aliss\Desktop\Proyectos-laboratoria\LIM015-card-validation\readme.md
+//     .then(links => console.log(links))
+//     .catch(console.error);  
+// mdLinks(process.argv, {validate: true}) // cuando se recibe el argumento por consola el path debe ser un string.
+//   .then(links => console.log(links))
+//   .catch(console.error);  
 
