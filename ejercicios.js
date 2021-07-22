@@ -160,4 +160,4 @@ const singleOccurrence = (string) => {
   }
   return newString;
 };
-// console.log(singleOccurrence("s"));
+console.log(singleOccurrence("s"));
