@@ -1,10 +1,15 @@
 const fs = require("fs"); // usando modulos COMMONJS
 const path = require("path");
-const markDownIt = require("markdown-it");
-const markdownLinkExtractor = require("markdown-link-extractor");
+const md = require("markdown-it")({
+  html: true,
+  linkify: true,
+  typographer: true,
+});
+const jsdom = require("jsdom");
+const { JSDOM } = jsdom;
+// const markdownLinkExtractor = require("markdown-link-extractor");
 
 function toPathAbsolute(pathParameter) {
-  // console.log(pathParameter)
   let newPath;
   Array.isArray(pathParameter)
     ? (newPath = pathParameter[2])
@@ -17,7 +22,7 @@ function toPathAbsolute(pathParameter) {
     ext === "" ? (ext = ".md") : ext;
     base = name + ext;
     pathAbsolute = path.join(dir, base);
-  } else if (path.isAbsolute(newPath) === false) {
+  } else if (!path.isAbsolute(newPath)) {
     // path es relativo
     const cwd = process.cwd(); //path.dirname(__filename);
     let { root, dir, base, ext, name } = path.parse(newPath);
@@ -30,55 +35,64 @@ function toPathAbsolute(pathParameter) {
     // path es un directorio
     console.log("path es otra cosa");
   }
-  console.log(pathAbsolute);
   return pathAbsolute;
 }
 
-function extractLinks(fyle) {
-  // const md = new markDownIt();
-  // const result = md.render(fyle);
-  const links = markdownLinkExtractor(fyle, true);
-  links.forEach((link) => console.log(link));
+function arrayOfLinks(file, pathAbsolute) {
+  const renderFile = md.render(file);
+  const dom = new JSDOM(renderFile);
+  const a = dom.window.document.querySelectorAll("a"); // 'NodeList'
+  const arrayOfLinks = new Array();
+  a.forEach((a) => {
+    const { href, text } = a;
+    const link = {};
+    link["href"] = href;
+    link["text"] = text;
+    link["file"] = pathAbsolute;
+    arrayOfLinks.push(link);
+  });
+  return arrayOfLinks;
 }
 
-// module.exports = () => {
-const mdLinks = (pathParameter, options = false) => {
-  /*const arrayOfLinks = () => {
-    const array = new Array;
-    const absolutePath = () => {} // convertir la ruta relativa en absoluta
-    // recorrer todo el archivo y almacenar los links y text en array
-    // se recorre cada link del array y se forman los objetos
-    // validacion true o false de validate dentro del bucle for()
-      if(options.validate){
-        // peticion http con status
-        // se agrega propiedad status dentro del objeto
-        // se agrega ok o fail por cada respuesta http
-        return array; 
-      } else{ 
-        return array;
-      }
+function arrayOfLinksWithStatus(arrayOfLinks) {
+  arrayOfLinks.forEach((link) => {
+    const { href } = link;
+    link["ok"] = "ok";
+  });
+  return arrayOfLinks;
+}
 
-  }*/
-  // leer documento readme y extraer links y text y ponerlos en un array;
-  // agregar el file dentro de cada objeto del arrayOfLinks
-  // function status de cada link
-  // arrayOfLinks.push({file:path});
-  // options.validate sea true analizar cada link http y pushear el status dentro de un arrayOfLinks
+// const options = new Object();
+const mdLinks = (pathParameter, options = false) => {
+  let { validate, stats } = options;
+  const pathAbsolute = toPathAbsolute(pathParameter);
+  function cases(file) {
+    if (!options) {
+      return arrayOfLinks(file, pathAbsolute);
+    } else if (validate) {
+      return arrayOfLinksWithStatus(arrayOfLinks(file, pathAbsolute));
+    } else if (stats) {
+      return "stats es true";
+    } else {
+      return "otro caso";
+    }
+  }
   return new Promise((resolve, reject) => {
-    fs.readFile(toPathAbsolute(pathParameter), "utf-8", (error, fyle) => {
+    fs.readFile(pathAbsolute, "utf-8", (error, file) => {
       if (error) {
-        reject(`ERROR AL LEER RUTA ${error}`);
+        reject(`ERROR AL LEER LA RUTA${error}`);
       } else {
-        resolve(extractLinks(fyle));
+        resolve(cases(file));
       }
     });
   });
 };
-// }
 
-// mdLinks('..\\LIM015-cipher\\readme.md', {validate: true}) // path relativo print: ..\LIM015-cipher\readme.md
-//     .then(links => console.log(links))
-//     .catch(console.error);
+module.exports = mdLinks;
+
+// mdLinks("..\\LIM015-cipher\\readme.md", { validate: true }) // path relativo print: ..\LIM015-cipher\readme.md
+//   .then((links) => console.log(links))
+//   .catch(console.error);
 // mdLinks('readme.md', {validate: true}) // path relativo print: C:\Users\aliss\Desktop\Proyectos-laboratoria\LIM015-md-links\readme.md
 //     .then(links => console.log(links))
 //     .catch(console.error);
