@@ -28,6 +28,7 @@
   },
   "homepage": "https://github.com/AlissonCH/LIM015-md-links#readme",
   "dependencies": {
+    "axios": "^0.21.1",
     "colors": "^1.4.0",
     "jsdom": "^16.6.0",
     "markdown-it": "^12.1.0",

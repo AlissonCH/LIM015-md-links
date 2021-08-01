@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 const mdLinks = require("./index");
-
-mdLinks(process.argv) // cuando se recibe el argumento por consola el path debe ser un string.
+// cuando se recibe el argumento por consola el path debe ser un string.
+mdLinks(process.argv, { validate: true })
   .then((links) => console.log(links))
-  .catch(console.error);
+  .catch((err) => console.log(err));
