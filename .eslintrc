@@ -1,8 +1,18 @@
 {
   "env": {
-    "node": true
+    "node": true,
+    "commonjs": true,
+    "es2021": true
   },
+  "extends": [
+    "eslint:recommended"
+  ],
   "parserOptions": {
-    "ecmaVersion": 8
+    "ecmaVersion": 12,
+    "sourceType": "module"
+  },
+  "rules": {
+    "no-console": "warn",
+    "import/extensions": 0
   }
 }
