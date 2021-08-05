@@ -58,7 +58,6 @@ function arrayOfLinks(dataFile, pathAbsolute) {
   });
   return arrayOfLinks;
 }
-
 function arrayOfLinksWithStatus(arrayOfLinks) {
   const arrayOfPromises = [];
   arrayOfLinks.forEach((link) => {
@@ -73,14 +72,15 @@ function arrayOfLinksWithStatus(arrayOfLinks) {
         })
         .catch((err) => {
           if (err.response) {
-            link["status"] = err.response.status; //404
+            // console.log(err);
+            link["status"] = err.response.status; //404 o mayores a este
             link["statusText"] = "FAIL";
           } else if (err.request) {
-            link["status"] = err.message; //mensaje de error
-            link["statusText"] = "FAIL";
+            // console.log(err);
+            link["status"] = `${"HTTP Error request:".red} ${err.message}`;
+            link["statusText"] = null; // en caso la petición http no sea exitosa
           } else {
-            link["status"] = `ERROR:${err.message}`; //mensaje de error
-            link["statusText"] = "FAIL";
+            link["status"] = null; //si el link es un hipervinculo es null
           }
           resolve(link);
         });
@@ -110,11 +110,15 @@ const statsAndValidate = (arrayOfLinksWithStatus) => {
   return new Promise((resolve) => {
     statistics(arrayOfLinksWithStatus).then((stats) => {
       let broken = 0;
+      let errorRequest = 0;
       arrayOfLinksWithStatus.forEach((link) => {
-        if (link["status"] === 404 || link["status"] === 410) {
+        if (link["status"] >= 400) {
           broken = broken + 1;
+        } else if (!link["statusText"]) {
+          errorRequest += 1;
         }
       });
+      stats["ErrorRequest"] = errorRequest;
       stats["Broken"] = broken;
       resolve(stats);
     });

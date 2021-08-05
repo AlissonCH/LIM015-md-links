@@ -55,21 +55,26 @@ const showStatsInCli = (result) => {
 ${"Total: ".blue} ${result["Total"]}
 ${"Unique: ".blue} ${result["Unique"]}
 ${result["Broken"] ? `${"Broken".blue} ${result["Broken"]}` : ""}
-`);
+${
+  result["ErrorRequest"]
+    ? `${"Error Request:".red} ${result["ErrorRequest"]}`
+    : ""
+}`);
 };
 
 function acum(result) {
-  const acum = result.reduce(({ Total = 0, Unique = 0, Broken = 0 }, item) => {
-    Total += item.Total;
-    Unique += item.Unique;
-    Broken += item.Broken;
-    return { Total, Unique, Broken };
-  }, {});
+  const acum = result.reduce(
+    ({ Total = 0, Unique = 0, Broken = 0, ErrorRequest = 0 }, item) => {
+      Total += item.Total;
+      Unique += item.Unique;
+      Broken += item.Broken;
+      ErrorRequest += item.ErrorRequest;
+      return { Total, Unique, Broken, ErrorRequest };
+    },
+    {}
+  );
   return acum;
 }
-// const array = [false, false];
-// acum(array);
-// console.log(array);
 const showResultsInCli = (result) => {
   if (!Array.isArray(result)) {
     // result  array false
