@@ -22,6 +22,7 @@ function readFile(pathAbsolute) {
     });
   });
 }
+
 function toPathAbsolute(pathFile) {
   let pathAbsolute;
   if (path.isAbsolute(pathFile)) {
@@ -110,15 +111,15 @@ const statsAndValidate = (arrayOfLinksWithStatus) => {
   return new Promise((resolve) => {
     statistics(arrayOfLinksWithStatus).then((stats) => {
       let broken = 0;
-      let errorRequest = 0;
+      // let errorRequest = 0;
       arrayOfLinksWithStatus.forEach((link) => {
         if (link["status"] >= 400) {
           broken = broken + 1;
-        } else if (!link["statusText"]) {
-          errorRequest += 1;
+          // } else if (!link["statusText"]) {
+          //   errorRequest += 1;
         }
       });
-      stats["ErrorRequest"] = errorRequest;
+      // stats["ErrorRequest"] = errorRequest;
       stats["Broken"] = broken;
       resolve(stats);
     });
@@ -152,17 +153,18 @@ function ifPathIsDir(dir, options) {
       if (fs.lstatSync(next).isDirectory() === true) {
         crawl(next);
       } else {
+        let promise;
         let { ext } = path.parse(next);
         if (ext === ".md") {
-          let promise = new Promise((resolve) => {
+          promise = new Promise((resolve) => {
             readFile(next)
               .then((dataFile) => cases(options, dataFile, next))
               .then((result) => {
                 resolve(result);
               });
           });
-          arrayOfPromises.push(promise);
         }
+        arrayOfPromises.push(promise);
       }
     }
   }
@@ -181,48 +183,13 @@ function ifPathIsDir(dir, options) {
     });
   });
 }
-
-const mdLinks = (pathParameter, options = false) => {
-  let newPath = pathParameter;
-  if (
-    fs.existsSync(pathParameter) &&
-    fs.lstatSync(pathParameter).isDirectory()
-  ) {
-    // si el path es un directorio
-    return ifPathIsDir(pathParameter, options);
-  } else {
-    const pathAbsolute = toPathAbsolute(newPath);
-    return readFile(pathAbsolute).then((dataFile) =>
-      cases(options, dataFile, pathAbsolute)
-    );
-  }
+module.exports = {
+  readFile,
+  toPathAbsolute,
+  arrayOfLinks,
+  arrayOfLinksWithStatus,
+  statistics,
+  statsAndValidate,
+  cases,
+  ifPathIsDir,
 };
-module.exports = mdLinks;
-
-// mdLinks(process.argv[2], { stats: true })
-//   .then((result) => console.log(result))
-//   .catch((err) => console.log(err));
-
-// mdLinks("C:\\Users\\aliss\\Desktop\\Proyectos-laboratoria\\prueba\\readme.md", {
-//   validate: true,
-// })
-//   .then((links) => console.log(links))
-//   .catch((err) => console.log(err));
-
-// .then((links) => console.log(links))
-// .catch(console.error);
-// mdLinks('readme.md', {validate: true}) // path relativo print: C:\Users\aliss\Desktop\Proyectos-laboratoria\LIM015-md-links\readme.md
-//     .then(links => console.log(links))
-//     .catch(console.error);
-// mdLinks('./readme', {validate: true}) // path relativo a su propio directorio print: readme.md
-//     .then(links => console.log(links))
-//     .catch(console.error);
-// mdLinks('C:\\Users\\aliss\\Desktop\\Proyectos-laboratoria\\LIM015-card-validation\\readme', {validate: true}) // path absoluto C:\Users\aliss\Desktop\Proyectos-laboratoria\LIM015-card-validation\readme.md
-//     .then(links => console.log(links))
-//     .catch(console.error);
-// mdLinks('C:\\Users\\aliss\\Desktop\\proyecto prueba\\readme', {validate: true}) // path absoluto C:\Users\aliss\Desktop\Proyectos-laboratoria\LIM015-card-validation\readme.md
-//     .then(links => console.log(links))
-//     .catch(console.error);
-// mdLinks(process.argv, { validate: true }) // cuando se recibe el argumento por consola el path debe ser un string.
-//   .then((links) => console.log(links))
-//   .catch(console.error);
