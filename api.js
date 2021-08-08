@@ -22,7 +22,6 @@ function readFile(pathAbsolute) {
     });
   });
 }
-
 function toPathAbsolute(pathFile) {
   let pathAbsolute;
   if (path.isAbsolute(pathFile)) {
@@ -45,9 +44,10 @@ function toPathAbsolute(pathFile) {
 }
 
 function arrayOfLinks(dataFile, pathAbsolute) {
-  const renderFile = md.render(dataFile);
-  const dom = new JSDOM(renderFile);
+  const renderFile = md.render(dataFile); // string to HTML
+  const dom = new JSDOM(renderFile); // transform HTML to DOM
   const a = dom.window.document.querySelectorAll("a"); // 'NodeList'
+  const img = dom.window.document.querySelectorAll("img"); // 'NodeList'
   const arrayOfLinks = new Array();
   a.forEach((a) => {
     const { href, text } = a;
@@ -57,6 +57,16 @@ function arrayOfLinks(dataFile, pathAbsolute) {
     link["file"] = pathAbsolute;
     arrayOfLinks.push(link);
   });
+  if (img) {
+    img.forEach((img) => {
+      const { src, alt } = img;
+      const link = {};
+      link["href"] = src;
+      link["text"] = alt;
+      link["file"] = pathAbsolute;
+      arrayOfLinks.push(link);
+    });
+  }
   return arrayOfLinks;
 }
 function arrayOfLinksWithStatus(arrayOfLinks) {
@@ -67,19 +77,17 @@ function arrayOfLinksWithStatus(arrayOfLinks) {
         .get(link.href)
         .then((response) => {
           const { status, statusText } = response;
-          link["statusText"] = statusText;
           link["status"] = status;
+          link["statusText"] = statusText;
           resolve(link);
         })
         .catch((err) => {
           if (err.response) {
-            // console.log(err);
             link["status"] = err.response.status; //404 o mayores a este
             link["statusText"] = "FAIL";
           } else if (err.request) {
-            // console.log(err);
-            link["status"] = `${"HTTP Error request:".red} ${err.message}`;
-            link["statusText"] = null; // en caso la petición http no sea exitosa
+            link["status"] = null;
+            link["statusText"] = `${"HTTP Error request:".red} ${err.message}`; // en caso la petición http no sea exitosa
           } else {
             link["status"] = null; //si el link es un hipervinculo es null
           }
@@ -170,15 +178,21 @@ function ifPathIsDir(dir, options) {
   }
   crawl(dir);
   return new Promise((resolve, reject) => {
-    fs.stat(dir, (err) => {
-      if (err) {
-        reject(`${"ERROR:".red} ${err}`);
-      }
-    });
+    // fs.stat(dir, (err) => {
+    //   if (err) {
+    //     console.log("holi");
+    //     reject(`${"ERROR:".red} ${err}`);
+    //   }
+    // });
     Promise.all(arrayOfPromises).then((result) => {
       const acum = result.reduce((acum, item) => {
         return acum.concat(item);
       }, []);
+      if (result[0] === undefined) {
+        reject(
+          `${"ERROR:".red} Not found file(s) with 'md' ext at dir: ${dir}`
+        );
+      }
       resolve(acum);
     });
   });

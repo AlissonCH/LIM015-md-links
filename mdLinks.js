@@ -1,6 +1,6 @@
 const fs = require("fs"); // usando modulos COMMONJS
 require("colors");
-const api = require("./api");
+const { readFile, toPathAbsolute, cases, ifPathIsDir } = require("./api");
 const mdLinks = (pathParameter, options = false) => {
   pathParameter;
   if (
@@ -8,12 +8,12 @@ const mdLinks = (pathParameter, options = false) => {
     fs.lstatSync(pathParameter).isDirectory()
   ) {
     // si el path es un directorio
-    return api.ifPathIsDir(pathParameter, options);
+    return ifPathIsDir(pathParameter, options);
   } else {
-    const pathAbsolute = api.toPathAbsolute(pathParameter);
-    return api
-      .readFile(pathAbsolute)
-      .then((dataFile) => api.cases(options, dataFile, pathAbsolute));
+    const pathAbsolute = toPathAbsolute(pathParameter);
+    return readFile(pathAbsolute).then((dataFile) =>
+      cases(options, dataFile, pathAbsolute)
+    );
   }
 };
 module.exports = mdLinks;
@@ -22,7 +22,7 @@ module.exports = mdLinks;
 //   .then((result) => console.log(result))
 //   .catch((err) => console.log(err));
 
-// mdLinks("C:\\Users\\aliss\\Desktop\\Proyectos-laboratoria\\prueba\\readme.md", {
+// mdLinks("C:\\Users\\aliss\\Desktop\\Proyectos-laboratoria\\prueba\\cipher.md", {
 //   validate: true,
 // })
 //   .then((links) => console.log(links))

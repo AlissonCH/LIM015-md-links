@@ -90,8 +90,8 @@ const showResultsInCli = (result) => {
           `${item["file"]}`,
           `${item["href"]}`.blue,
           `${item["text"]}`,
-          `${item["statusText"] ? item["statusText"] : ""}`.magenta,
-          `${item["status"] ? item["status"] : ""}`.green
+          `${item["status"] ? item["status"] : ""}`.green,
+          `${item["statusText"] ? item["statusText"] : ""}`.magenta
         );
       });
     }
