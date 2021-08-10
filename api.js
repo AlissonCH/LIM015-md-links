@@ -87,7 +87,7 @@ function arrayOfLinksWithStatus(arrayOfLinks) {
             link["statusText"] = "FAIL";
           } else if (err.request) {
             link["status"] = null;
-            link["statusText"] = `${"HTTP Error request:".red} ${err.message}`; // en caso la petición http no sea exitosa
+            link["statusText"] = `${"HTTP Error request:"} ${err.message}`; // en caso la petición http no sea exitosa
           } else {
             link["status"] = null; //si el link es un hipervinculo es null
           }

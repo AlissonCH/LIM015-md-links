@@ -1,4 +1,4 @@
-/* eslint-disable no-undef */
+jest.mock("axios");
 const {
   readFile,
   toPathAbsolute,
@@ -9,6 +9,7 @@ const {
   cases,
   ifPathIsDir,
 } = require("../api");
+
 const pathA =
   "C:\\Users\\aliss\\Desktop\\Proyectos-laboratoria\\prueba\\cipher.md";
 const pathB =
@@ -19,6 +20,70 @@ const pathD =
   "C:\\Users\\aliss\\Desktop\\Proyectos-laboratoria\\prueba\\rprueba2.md";
 const pathE =
   "C:\\Users\\aliss\\Desktop\\Proyectos-laboratoria\\prueba\\rprueba3.md";
+
+const links = [
+  {
+    href: "https://linkOk1",
+    text: "Título1",
+    file: "C:\\Users\\aliss\\Desktop\\Proyectos-laboratoria\\prueba\\rprueba.md",
+  },
+  {
+    href: "https://linkOk1",
+    text: "Título1",
+    file: "C:\\Users\\aliss\\Desktop\\Proyectos-laboratoria\\prueba\\rprueba.md",
+  },
+  {
+    href: "http://linkRoto",
+    text: "TítuloRoto",
+    file: "C:\\Users\\aliss\\Desktop\\Proyectos-laboratoria\\prueba\\rprueba.md",
+  },
+  {
+    href: "http://failHttpRequest",
+    text: "TítuloFailHttpRequest",
+    file: "C:\\Users\\aliss\\Desktop\\Proyectos-laboratoria\\prueba\\rprueba.md",
+  },
+  {
+    href: "hipervinculo",
+    text: "TituloHipervinculo",
+    file: "C:\\Users\\aliss\\Desktop\\Proyectos-laboratoria\\prueba\\rprueba.md",
+  },
+];
+const linksWithStatus = [
+  {
+    href: "https://linkOk1",
+    text: "Título1",
+    file: "C:\\Users\\aliss\\Desktop\\Proyectos-laboratoria\\prueba\\rprueba.md",
+    status: 200,
+    statusText: "OK",
+  },
+  {
+    href: "https://linkOk1",
+    text: "Título1",
+    file: "C:\\Users\\aliss\\Desktop\\Proyectos-laboratoria\\prueba\\rprueba.md",
+    status: 200,
+    statusText: "OK",
+  },
+  {
+    href: "http://linkRoto",
+    text: "TítuloRoto",
+    file: "C:\\Users\\aliss\\Desktop\\Proyectos-laboratoria\\prueba\\rprueba.md",
+    status: 400,
+    statusText: "FAIL",
+  },
+  {
+    href: "http://failHttpRequest",
+    text: "TítuloFailHttpRequest",
+    file: "C:\\Users\\aliss\\Desktop\\Proyectos-laboratoria\\prueba\\rprueba.md",
+    status: null,
+    statusText: "HTTP Error request: errorRequest",
+  },
+  {
+    href: "hipervinculo",
+    text: "TituloHipervinculo",
+    file: "C:\\Users\\aliss\\Desktop\\Proyectos-laboratoria\\prueba\\rprueba.md",
+    status: null,
+  },
+];
 describe("readFile", () => {
   it("fileData is an string", () => {
     return readFile(pathA).then((fileData) => {
@@ -54,6 +119,7 @@ describe("toPathAbsolute", () => {
     );
   });
 });
+
 describe("arrayOfLinks", () => {
   it("should be return an array", () => {
     return readFile(pathA).then((dataFile) => {
@@ -82,81 +148,55 @@ describe("arrayOfLinksWithStatus", () => {
       });
     });
   });
-  it(`if link is hiperlink the 'status' should be null`, () => {
-    return readFile(pathD).then((dataFile) => {
-      return arrayOfLinksWithStatus(arrayOfLinks(dataFile, pathD)).then(
-        (result) => {
-          expect(result).toEqual(
-            expect.arrayContaining([
-              expect.objectContaining({
-                status: null,
-              }),
-            ])
-          );
-        }
-      );
+  it(`should return links with the following keys: { status: 200, statusText: "OK"},{ status: 400, statusText: "FAIL"},{ status: null, statusText: "HTTP Error request: errorRequest"}, { status: null}`, () => {
+    return arrayOfLinksWithStatus(links).then((result) => {
+      expect(result).toEqual(linksWithStatus);
     });
   });
 });
 describe("statistics", () => {
   it("should resolve an object which containing keys: 'Total', 'Unique'", () => {
-    return readFile(pathA).then((dataFile) => {
-      return statistics(arrayOfLinks(dataFile, pathA)).then((result) =>
-        expect(result).toEqual(
-          expect.objectContaining({
-            Total: expect.any(Number),
-            Unique: expect.any(Number),
-          })
-        )
-      );
-    });
+    statistics(links).then((result) =>
+      expect(result).toEqual(
+        expect.objectContaining({
+          Total: expect.any(Number),
+          Unique: expect.any(Number),
+        })
+      )
+    );
   });
-  it(`resolve an object: {'Total':6, 'Unique':4 }`, () => {
-    return readFile(pathE).then((dataFile) => {
-      return statistics(arrayOfLinks(dataFile, pathE)).then((result) =>
-        expect(result).toEqual(
-          expect.objectContaining({
-            Total: 6,
-            Unique: 4,
-          })
-        )
-      );
-    });
+  it(`resolve an object: {'Total':5, 'Unique':4 }`, () => {
+    return statistics(links).then((result) =>
+      expect(result).toEqual(
+        expect.objectContaining({
+          Total: 5,
+          Unique: 4,
+        })
+      )
+    );
   });
 });
 
 describe("statsAndValidate", () => {
   it("should resolve an object which containing keys: 'Total', 'Unique', 'Broken'", () => {
-    return readFile(pathC).then((dataFile) => {
-      return arrayOfLinksWithStatus(arrayOfLinks(dataFile, pathC)).then(
-        (result) => {
-          return statsAndValidate(result).then((result) => {
-            expect(result).toEqual(
-              expect.objectContaining({
-                Total: expect.any(Number),
-                Unique: expect.any(Number),
-                Broken: expect.any(Number),
-              })
-            );
-          });
-        }
+    return statsAndValidate(linksWithStatus).then((result) => {
+      expect(result).toEqual(
+        expect.objectContaining({
+          Total: expect.any(Number),
+          Unique: expect.any(Number),
+          Broken: expect.any(Number),
+        })
       );
     });
   });
-  it(`resolve an object: {'Total':4, 'Unique':4 , 'Broken:2}`, () => {
-    return readFile(pathC).then((dataFile) => {
-      return arrayOfLinksWithStatus(arrayOfLinks(dataFile, pathC)).then(
-        (result) => {
-          return statsAndValidate(result).then((result) => {
-            expect(result).toEqual(
-              expect.objectContaining({
-                Total: 4,
-                Unique: 4,
-                Broken: 2,
-              })
-            );
-          });
-        }
+  it(`resolve an object: {'Total':5, 'Unique':4 , 'Broken:2}`, () => {
+    return statsAndValidate(linksWithStatus).then((result) => {
+      expect(result).toEqual(
+        expect.objectContaining({
+          Total: 5,
+          Unique: 4,
+          Broken: 1,
+        })
       );
     });
   });
