@@ -5,7 +5,7 @@ md-links is a module and command-line interface that verifies the links that a m
 ## Installation
 
 ```bash
-$ npm install AlissonCH/md-links
+$ npm install @alissonch/md-links
 ```
 
 ## API
@@ -156,6 +156,6 @@ Broken : 1
 Pull requests are welcome. For major changes, please open an [issue]("https://github.com/AlissonCH/LIM015-md-links/issues") first to discuss what you would like to change.
 
 Please make sure to update tests as appropriate.
-
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](CODE_OF_CONDUCT.md)
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
