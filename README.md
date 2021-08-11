@@ -1,11 +1,11 @@
-# alissoncruz-md-links
+# alissoncruzh-md-links
 
 md-links is a module and command-line interface that verifies the links that a markdown file contains, validates that they are unbroken, and reports some statistics.
 
 ## Installation
 
 ```bash
-$ npm install alissoncruz-md-links
+$ npm install alissoncruzh-md-links
 ```
 
 ## API
@@ -24,7 +24,7 @@ Returns:
 ### Examples
 
 ```javascript
-const mdLinks = require('alissoncruz-md-links');
+const mdLinks = require('alissoncruzh-md-links');
 
 mdLinks('./some/example.md').then( links => {
  // => [{ href, text, file }, ...]
@@ -153,7 +153,7 @@ Unique : 3
 Broken : 1
 ```
 ## Contributing
-Pull requests are welcome. For major changes, please open an [issue]("https://github.com/AlissonCH/md-links/issues") first to discuss what you would like to change.
+Pull requests are welcome. For major changes, please open an [issue]("https://github.com/AlissonCH/alissoncruzh-md-links/issues") first to discuss what you would like to change.
 
 Please make sure to update tests as appropriate.
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](CODE_OF_CONDUCT.md)
