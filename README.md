@@ -5,7 +5,7 @@ md-links is a module and command-line interface that verifies the links that a m
 ## Installation
 
 ```bash
-$ npm install @alissonch/md-links
+$ npm install alissonch-md-links
 ```
 
 ## API
@@ -24,7 +24,7 @@ Returns:
 ### Examples
 
 ```javascript
-const md-links = require('md-links');
+const mdLinks = require('alissonch-md-links');
 
 mdLinks('./some/example.md').then( links => {
  // => [{ href, text, file }, ...]
@@ -64,7 +64,7 @@ mdLinks('./some/example.md', {stats : true, validate:true }).then(arrayOfLinks =
 ### Examples
 
 ```javascript
-md-links('./some/example.md').then( links => console.log(links))
+mdLinks('./some/example.md').then( links => console.log(links))
 
 // Console
 [
@@ -82,7 +82,7 @@ md-links('./some/example.md').then( links => console.log(links))
  }
 ]
 
-md-links('./some/example.md', {validate : true}).then( links => console.log(links))
+mdLinks('./some/example.md', {validate : true}).then( links => console.log(links))
 
 // Console
 [
@@ -106,7 +106,7 @@ md-links('./some/example.md', {validate : true}).then( links => console.log(link
  }
 ]
 
-md-links('./some/example.md', {stats : true}).then( result => console.log(result))
+mdLinks('./some/example.md', {stats : true}).then( result => console.log(result))
 
 // Console
  { 
@@ -114,7 +114,7 @@ md-links('./some/example.md', {stats : true}).then( result => console.log(result
   Unique: 3
  }  
 
-md-links('./some/example.md', {stats : true, vaidate: true}).then( result => console.log(result))
+mdLinks('./some/example.md', {stats : true, vaidate: true}).then( result => console.log(result))
 
 // Console
  { 

@@ -1,5 +1,5 @@
 {
-  "name": "@alissonch/md-links",
+  "name": "alissonch-md-links",
   "version": "1.0.0",
   "description": "Validate unbroken links from a markdown file and report some statistics",
   "main": "mdLinks.js",
@@ -44,6 +44,6 @@
     "nodemon": "^2.0.12"
   },
   "bin": {
-    "md-links": "./cli.js"
+    "md-links": "cli.js"
   }
 }
