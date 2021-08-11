@@ -2,7 +2,7 @@
   "name": "alicruz-md-links",
   "version": "1.0.0",
   "description": "Validate unbroken links from a markdown file and report some statistics",
-  "main": "mdLinks.js",
+  "main": "src/mdLinks.js",
   "keywords": [
     "links",
     "markdown",
@@ -41,7 +41,7 @@
     "nodemon": "^2.0.12"
   },
   "bin": {
-    "md-links": "cli.js"
+    "md-links": "src/cli.js"
   },
   "engines": {
     "node": ">=8"
