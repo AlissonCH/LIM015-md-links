@@ -89,9 +89,9 @@ const showResultsInCli = (result) => {
         console.log(
           `${item["file"]}`,
           `${item["href"]}`.blue,
-          `${item["text"]}`,
           `${item["status"] ? item["status"] : ""}`.green,
-          `${item["statusText"] ? item["statusText"] : ""}`.magenta
+          `${item["statusText"] ? item["statusText"] : ""}`.magenta,
+          `${item["text"]}`
         );
       });
     }

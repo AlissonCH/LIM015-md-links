@@ -9,7 +9,6 @@ const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
 const axios = require("axios");
 require("colors");
-// const markdownLinkExtractor = require("markdown-link-extractor");
 
 function readFile(pathAbsolute) {
   return new Promise((resolve, reject) => {
@@ -22,6 +21,7 @@ function readFile(pathAbsolute) {
     });
   });
 }
+
 function toPathAbsolute(pathFile) {
   let pathAbsolute;
   if (path.isAbsolute(pathFile)) {
@@ -32,7 +32,7 @@ function toPathAbsolute(pathFile) {
     pathAbsolute = path.join(dir, base);
   } else {
     // path es relativo
-    const cwd = process.cwd(); //otra forma path.dirname(__filename);
+    const cwd = process.cwd();
     let { dir, base, ext, name } = path.parse(pathFile);
     ext === "" ? (ext = ".md") : ext;
     base = name + ext;

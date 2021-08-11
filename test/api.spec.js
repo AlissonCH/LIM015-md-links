@@ -82,6 +82,7 @@ const linksWithStatus = [
     status: null,
   },
 ];
+
 describe("readFile", () => {
   it("fileData is an string", () => {
     return readFile(pathA).then((fileData) => {
