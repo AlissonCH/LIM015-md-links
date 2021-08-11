@@ -6,7 +6,6 @@
   "keywords": [
     "links",
     "markdown",
-    "module",
     "md-links",
     "http",
     "mdLinks",
@@ -34,9 +33,7 @@
     "axios": "^0.21.1",
     "colors": "^1.4.0",
     "jsdom": "^16.6.0",
-    "markdown-it": "^12.1.0",
-    "node-fetch": "^2.6.1",
-    "xmlhttprequest": "^1.8.0"
+    "markdown-it": "^12.1.0"
   },
   "devDependencies": {
     "eslint": "^7.31.0",
@@ -44,6 +41,9 @@
     "nodemon": "^2.0.12"
   },
   "bin": {
-    "md-links": "cli.js"
+    "mdLinks": "./cli.js"
+  },
+  "engines":{
+    "node":">=8"
   }
 }
