@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/alissoncruz-md-links
 require("colors");
 const mdLinks = require("./mdLinks");
 
