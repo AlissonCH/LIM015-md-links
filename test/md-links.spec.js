@@ -1,5 +1,5 @@
 jest.mock("axios");
-const mdLinks = require("../mdLinks");
+const mdLinks = require("../src/mdLinks");
 const pathA =
   "C:\\Users\\aliss\\Desktop\\Proyectos-laboratoria\\prueba\\rprueba.md";
 const pathB =
