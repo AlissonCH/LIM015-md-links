@@ -1,11 +1,8 @@
 {
-  "name": "AlissonCH/md-links",
+  "name": "@alissonch/md-links",
   "version": "1.0.0",
   "description": "Validate unbroken links from a markdown file and report some statistics",
-  "main": "dist/mdLinks.js",
-  "umd:main": "dist/mdLinks.umd.js",
-  "module": "dist/mdLinks.mjs",
-  "source": "./mdLinks.js",
+  "main": "mdLinks.js",
   "keywords": [
     "links",
     "markdown",

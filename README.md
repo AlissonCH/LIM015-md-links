@@ -5,7 +5,7 @@ md-links is a module and command-line interface that verifies the links that a m
 ## Installation
 
 ```bash
-$ npm install AlissonCH/md-links
+$ npm install alissonch/md-links
 ```
 
 ## API
