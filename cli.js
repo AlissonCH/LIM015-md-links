@@ -14,7 +14,7 @@ const usageMessage = () => {
 
   Description of arguments:
   ${
-    `[<path]`.blue
+    `[<path>]`.blue
   }                   Must be a string, it can be file with extension '.md' or dir 
   ${`[--validate]`.blue}              Http status request for each link in md
   ${`[--stats]`.blue}                 General statistics of links
@@ -42,6 +42,8 @@ function options() {
     } else if (secondArgument == "--stats" && !thirdArgument) {
       return { stats: true };
     } else if (secondArgument == "--stats" && thirdArgument == "--validate") {
+      return { stats: true, validate: true };
+    } else if (secondArgument == "--validate" && thirdArgument == "--stats") {
       return { stats: true, validate: true };
     } else {
       return usageMessage();
