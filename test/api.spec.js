@@ -16,69 +16,67 @@ const pathB =
   "C:\\Users\\aliss\\Desktop\\Proyectos-laboratoria\\prueba\\noExiste.md";
 const pathC =
   "C:\\Users\\aliss\\Desktop\\Proyectos-laboratoria\\prueba\\rprueba.md";
-const pathD =
-  "C:\\Users\\aliss\\Desktop\\Proyectos-laboratoria\\prueba\\rprueba2.md";
 const pathE =
   "C:\\Users\\aliss\\Desktop\\Proyectos-laboratoria\\prueba\\rprueba3.md";
 
 const links = [
   {
-    href: "https://linkOk1",
+    href: "https://linkok1/",
     text: "Título1",
     file: "C:\\Users\\aliss\\Desktop\\Proyectos-laboratoria\\prueba\\rprueba.md",
   },
   {
-    href: "https://linkOk1",
+    href: "https://linkok1/",
     text: "Título1",
     file: "C:\\Users\\aliss\\Desktop\\Proyectos-laboratoria\\prueba\\rprueba.md",
   },
   {
-    href: "http://linkRoto",
+    href: "http://linkroto/",
     text: "TítuloRoto",
     file: "C:\\Users\\aliss\\Desktop\\Proyectos-laboratoria\\prueba\\rprueba.md",
   },
   {
-    href: "http://failHttpRequest",
+    href: "http://failhttprequest/",
     text: "TítuloFailHttpRequest",
     file: "C:\\Users\\aliss\\Desktop\\Proyectos-laboratoria\\prueba\\rprueba.md",
   },
   {
-    href: "hipervinculo",
+    href: "about:blank#hipervinculo",
     text: "TituloHipervinculo",
     file: "C:\\Users\\aliss\\Desktop\\Proyectos-laboratoria\\prueba\\rprueba.md",
   },
 ];
 const linksWithStatus = [
   {
-    href: "https://linkOk1",
+    href: "https://linkok1/",
     text: "Título1",
     file: "C:\\Users\\aliss\\Desktop\\Proyectos-laboratoria\\prueba\\rprueba.md",
     status: 200,
     statusText: "OK",
   },
   {
-    href: "https://linkOk1",
+    href: "https://linkok1/",
     text: "Título1",
     file: "C:\\Users\\aliss\\Desktop\\Proyectos-laboratoria\\prueba\\rprueba.md",
     status: 200,
     statusText: "OK",
   },
   {
-    href: "http://linkRoto",
+    href: "http://linkroto/",
     text: "TítuloRoto",
     file: "C:\\Users\\aliss\\Desktop\\Proyectos-laboratoria\\prueba\\rprueba.md",
     status: 400,
     statusText: "FAIL",
   },
   {
-    href: "http://failHttpRequest",
+    href: "http://failhttprequest/",
     text: "TítuloFailHttpRequest",
     file: "C:\\Users\\aliss\\Desktop\\Proyectos-laboratoria\\prueba\\rprueba.md",
     status: null,
     statusText: "HTTP Error request: errorRequest",
   },
   {
-    href: "hipervinculo",
+    href: "about:blank#hipervinculo",
     text: "TituloHipervinculo",
     file: "C:\\Users\\aliss\\Desktop\\Proyectos-laboratoria\\prueba\\rprueba.md",
     status: null,
@@ -204,8 +202,8 @@ describe("statsAndValidate", () => {
 
 describe("Cases", () => {
   it("if options = false, should return an array of objects with key: 'href' ", () => {
-    return readFile(pathC).then((dataFile) => {
-      return cases(false, dataFile, pathC).then((array) => {
+    return readFile(pathE).then((dataFile) => {
+      return cases(false, dataFile, pathE).then((array) => {
         expect(array).toEqual(
           expect.arrayContaining([
             expect.objectContaining({
@@ -217,8 +215,8 @@ describe("Cases", () => {
     });
   });
   it("if options = {validate:true}, should return an array of objects with key: 'status' ", () => {
-    return readFile(pathC).then((dataFile) => {
-      return cases({ validate: true }, dataFile, pathC).then((array) => {
+    return readFile(pathE).then((dataFile) => {
+      return cases({ validate: true }, dataFile, pathE).then((array) => {
         expect(array).toEqual(
           expect.arrayContaining([
             expect.objectContaining({

@@ -1,7 +1,7 @@
 {
   "name": "md-links",
-  "version": "0.1.0",
-  "description": "Verifies links of a file with md extension and reports some statistics",
+  "version": "1.0.0",
+  "description": "extract links of markdown file, obtein http status and reports some statistics",
   "main": "index.js",
   "keywords": [
     "links",

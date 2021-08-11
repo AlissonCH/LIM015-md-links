@@ -1,10 +1,10 @@
 const get = (url) => {
   return new Promise((resolve, reject) => {
-    if (url === "http://linkRoto") {
+    if (url === "http://linkroto/") {
       reject({ response: { status: 400 } });
-    } else if (url === "http://failHttpRequest") {
+    } else if (url === "http://failhttprequest/") {
       reject({ request: {}, message: "errorRequest" });
-    } else if (url === "hipervinculo") {
+    } else if (url === "about:blank#hipervinculo") {
       reject({ message: "" });
     } else {
       resolve({ status: 200, statusText: "OK" });
@@ -12,5 +12,3 @@ const get = (url) => {
   });
 };
 exports.get = get;
-
-// const mymock = jest.fn();
