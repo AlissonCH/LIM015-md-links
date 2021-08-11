@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+
 require("colors");
 const mdLinks = require("./mdLinks");
 
@@ -116,5 +117,4 @@ function cli() {
     return console.log(usageMessage());
   }
 }
-
 cli();

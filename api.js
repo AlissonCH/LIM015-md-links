@@ -178,12 +178,6 @@ function ifPathIsDir(dir, options) {
   }
   crawl(dir);
   return new Promise((resolve, reject) => {
-    // fs.stat(dir, (err) => {
-    //   if (err) {
-    //     console.log("holi");
-    //     reject(`${"ERROR:".red} ${err}`);
-    //   }
-    // });
     Promise.all(arrayOfPromises).then((result) => {
       const acum = result.reduce((acum, item) => {
         return acum.concat(item);
