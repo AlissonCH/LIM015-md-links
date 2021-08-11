@@ -1,15 +1,19 @@
 {
-  "name": "md-links",
+  "name": "AlissonCH/md-links",
   "version": "1.0.0",
   "description": "Validate unbroken links from a markdown file and report some statistics",
-  "main": "api.js",
+  "main": "dist/mdLinks.js",
+  "umd:main": "dist/mdLinks.umd.js",
+  "module": "dist/mdLinks.mjs",
+  "source": "./mdLinks.js",
   "keywords": [
     "links",
     "markdown",
     "module",
     "md-links",
     "http",
-    "mdLinks"
+    "mdLinks",
+    "broken links"
   ],
   "directories": {
     "test": "test"
@@ -23,8 +27,8 @@
     "type": "git",
     "url": "git+https://github.com/AlissonCH/LIM015-md-links.git"
   },
-  "author": "Rocio Alisson Cruz Holguin",
-  "license": "ISC",
+  "author": "Rocio Alisson Cruz Holguin <rocio.cruz@unmsm.edu.pe>",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/AlissonCH/LIM015-md-links/issues"
   },

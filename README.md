@@ -5,13 +5,13 @@ md-links is a module and command-line interface that verifies the links that a m
 ## Installation
 
 ```bash
-$ npm install githubname/md-links
+$ npm install AlissonCH/md-links
 ```
 
 ## API
 Parameters:
 
-- ``path`` absolute or relative path with a markdown file. Or directory with markdown files.
+- ``path`` absolute or relative path with a markdown file. Or directory with markdown files. It is recommended that the path be a string to avoid path recognition problems in different execution environments.
 - ``options`` is an object, the default value is false.
 
 Returns:

@@ -17,3 +17,4 @@ const mdLinks = (pathParameter, options = false) => {
   }
 };
 module.exports = mdLinks;
+// console.log(process.env);
