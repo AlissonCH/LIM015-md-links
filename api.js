@@ -9,7 +9,6 @@ const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
 const axios = require("axios");
 require("colors");
-// const markdownLinkExtractor = require("markdown-link-extractor");
 
 function readFile(pathAbsolute) {
   return new Promise((resolve, reject) => {
@@ -22,6 +21,7 @@ function readFile(pathAbsolute) {
     });
   });
 }
+
 function toPathAbsolute(pathFile) {
   let pathAbsolute;
   if (path.isAbsolute(pathFile)) {
@@ -32,7 +32,7 @@ function toPathAbsolute(pathFile) {
     pathAbsolute = path.join(dir, base);
   } else {
     // path es relativo
-    const cwd = process.cwd(); //otra forma path.dirname(__filename);
+    const cwd = process.cwd();
     let { dir, base, ext, name } = path.parse(pathFile);
     ext === "" ? (ext = ".md") : ext;
     base = name + ext;
@@ -44,9 +44,10 @@ function toPathAbsolute(pathFile) {
 }
 
 function arrayOfLinks(dataFile, pathAbsolute) {
-  const renderFile = md.render(dataFile);
-  const dom = new JSDOM(renderFile);
+  const renderFile = md.render(dataFile); // string to HTML
+  const dom = new JSDOM(renderFile); // transform HTML to DOM
   const a = dom.window.document.querySelectorAll("a"); // 'NodeList'
+  const img = dom.window.document.querySelectorAll("img"); // 'NodeList'
   const arrayOfLinks = new Array();
   a.forEach((a) => {
     const { href, text } = a;
@@ -56,9 +57,18 @@ function arrayOfLinks(dataFile, pathAbsolute) {
     link["file"] = pathAbsolute;
     arrayOfLinks.push(link);
   });
+  if (img) {
+    img.forEach((img) => {
+      const { src, alt } = img;
+      const link = {};
+      link["href"] = src;
+      link["text"] = alt;
+      link["file"] = pathAbsolute;
+      arrayOfLinks.push(link);
+    });
+  }
   return arrayOfLinks;
 }
-
 function arrayOfLinksWithStatus(arrayOfLinks) {
   const arrayOfPromises = [];
   arrayOfLinks.forEach((link) => {
@@ -67,20 +77,19 @@ function arrayOfLinksWithStatus(arrayOfLinks) {
         .get(link.href)
         .then((response) => {
           const { status, statusText } = response;
-          link["statusText"] = statusText;
           link["status"] = status;
+          link["statusText"] = statusText;
           resolve(link);
         })
         .catch((err) => {
           if (err.response) {
-            link["status"] = err.response.status; //404
+            link["status"] = err.response.status; //404 o mayores a este
             link["statusText"] = "FAIL";
           } else if (err.request) {
-            link["status"] = err.message; //mensaje de error
-            link["statusText"] = "FAIL";
+            link["status"] = null;
+            link["statusText"] = `${"HTTP Error request:"} ${err.message}`; // en caso la petición http no sea exitosa
           } else {
-            link["status"] = `ERROR:${err.message}`; //mensaje de error
-            link["statusText"] = "FAIL";
+            link["status"] = null; //si el link es un hipervinculo es null
           }
           resolve(link);
         });
@@ -110,11 +119,15 @@ const statsAndValidate = (arrayOfLinksWithStatus) => {
   return new Promise((resolve) => {
     statistics(arrayOfLinksWithStatus).then((stats) => {
       let broken = 0;
+      // let errorRequest = 0;
       arrayOfLinksWithStatus.forEach((link) => {
-        if (link["status"] === 404 || link["status"] === 410) {
+        if (link["status"] >= 400) {
           broken = broken + 1;
+          // } else if (!link["statusText"]) {
+          //   errorRequest += 1;
         }
       });
+      // stats["ErrorRequest"] = errorRequest;
       stats["Broken"] = broken;
       resolve(stats);
     });
@@ -148,77 +161,49 @@ function ifPathIsDir(dir, options) {
       if (fs.lstatSync(next).isDirectory() === true) {
         crawl(next);
       } else {
+        let promise;
         let { ext } = path.parse(next);
         if (ext === ".md") {
-          let promise = new Promise((resolve) => {
+          promise = new Promise((resolve) => {
             readFile(next)
               .then((dataFile) => cases(options, dataFile, next))
               .then((result) => {
                 resolve(result);
               });
           });
-          arrayOfPromises.push(promise);
         }
+        arrayOfPromises.push(promise);
       }
     }
   }
   crawl(dir);
   return new Promise((resolve, reject) => {
-    fs.stat(dir, (err) => {
-      if (err) {
-        reject(`${"ERROR:".red} ${err}`);
-      }
-    });
+    // fs.stat(dir, (err) => {
+    //   if (err) {
+    //     console.log("holi");
+    //     reject(`${"ERROR:".red} ${err}`);
+    //   }
+    // });
     Promise.all(arrayOfPromises).then((result) => {
       const acum = result.reduce((acum, item) => {
         return acum.concat(item);
       }, []);
+      if (result[0] === undefined) {
+        reject(
+          `${"ERROR:".red} Not found file(s) with 'md' ext at dir: ${dir}`
+        );
+      }
       resolve(acum);
     });
   });
 }
-
-const mdLinks = (pathParameter, options = false) => {
-  let newPath = pathParameter;
-  if (
-    fs.existsSync(pathParameter) &&
-    fs.lstatSync(pathParameter).isDirectory()
-  ) {
-    // si el path es un directorio
-    return ifPathIsDir(pathParameter, options);
-  } else {
-    const pathAbsolute = toPathAbsolute(newPath);
-    return readFile(pathAbsolute).then((dataFile) =>
-      cases(options, dataFile, pathAbsolute)
-    );
-  }
+module.exports = {
+  readFile,
+  toPathAbsolute,
+  arrayOfLinks,
+  arrayOfLinksWithStatus,
+  statistics,
+  statsAndValidate,
+  cases,
+  ifPathIsDir,
 };
-module.exports = mdLinks;
-
-// mdLinks(process.argv[2], { stats: true })
-//   .then((result) => console.log(result))
-//   .catch((err) => console.log(err));
-
-// mdLinks("C:\\Users\\aliss\\Desktop\\Proyectos-laboratoria\\prueba\\readme.md", {
-//   validate: true,
-// })
-//   .then((links) => console.log(links))
-//   .catch((err) => console.log(err));
-
-// .then((links) => console.log(links))
-// .catch(console.error);
-// mdLinks('readme.md', {validate: true}) // path relativo print: C:\Users\aliss\Desktop\Proyectos-laboratoria\LIM015-md-links\readme.md
-//     .then(links => console.log(links))
-//     .catch(console.error);
-// mdLinks('./readme', {validate: true}) // path relativo a su propio directorio print: readme.md
-//     .then(links => console.log(links))
-//     .catch(console.error);
-// mdLinks('C:\\Users\\aliss\\Desktop\\Proyectos-laboratoria\\LIM015-card-validation\\readme', {validate: true}) // path absoluto C:\Users\aliss\Desktop\Proyectos-laboratoria\LIM015-card-validation\readme.md
-//     .then(links => console.log(links))
-//     .catch(console.error);
-// mdLinks('C:\\Users\\aliss\\Desktop\\proyecto prueba\\readme', {validate: true}) // path absoluto C:\Users\aliss\Desktop\Proyectos-laboratoria\LIM015-card-validation\readme.md
-//     .then(links => console.log(links))
-//     .catch(console.error);
-// mdLinks(process.argv, { validate: true }) // cuando se recibe el argumento por consola el path debe ser un string.
-//   .then((links) => console.log(links))
-//   .catch(console.error);
