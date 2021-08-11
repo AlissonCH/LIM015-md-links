@@ -1,8 +1,8 @@
 {
-  "name": "alich-md-links",
+  "name": "alicruzh-md-links",
   "version": "1.0.0",
   "description": "Validate unbroken links from a markdown file and report some statistics",
-  "main": "./src/mdLinks.js",
+  "main": "src/mdLinks.js",
   "keywords": [
     "links",
     "markdown",
@@ -17,7 +17,8 @@
   "scripts": {
     "test": "jest --verbose --coverage",
     "lint": "eslint .  --ext .js",
-    "lint-fix": "eslint . --ext .js --fix"
+    "lint-fix": "eslint . --ext .js --fix",
+    "build": "microbundle"
   },
   "repository": {
     "type": "git",
@@ -41,10 +42,7 @@
     "nodemon": "^2.0.12"
   },
   "bin": {
-    "md-links": "./bin/cli.js"
-  },
-  "engines": {
-    "node": ">=8"
+    "md-links": "./src/cli.js"
   },
   "preferGlobal": true,
   "publishConfig": {

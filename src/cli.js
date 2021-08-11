@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 require("colors");
-const mdLinks = require("../src/mdLinks.js");
+const mdLinks = require("./mdLinks.js");
 
 const usageMessage = () => {
   const message = `
