@@ -1,14 +1,23 @@
-# alicruzh-md-links
+# alicruz-mdlinks
 
-alicruzh-md-links is a module and command-line interface that verifies the links that a markdown file contains, validates that they are unbroken, and reports some statistics.
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](CODE_OF_CONDUCT.md)
+
+alicruz-mdlinks is a module and command-line interface that verifies the links that a markdown file contains, validates that they are unbroken, and reports some statistics.
 
 ## Installation
 
+It is recommendable global install, to use both: API and command-line interface correctly.
+
+### npm module
+
+[alicruz-mdlinks](https://www.npmjs.com/package/alicruz-mdlinks)
+
 ```bash
-$ npm install --global alicruzh-md-links
+$ npm install --global alicruz-mdlinks
 ```
 
 ## API
+
 Parameters:
 
 - ``path`` absolute or relative path with a markdown file. Or directory with markdown files. It is recommended that the path be a string to avoid path recognition problems in different execution environments.
@@ -24,7 +33,7 @@ Returns:
 ### Examples
 
 ```javascript
-const mdLinks = require('alicruzh-md-links');
+const mdLinks = require('../alicruzh-mdlinks');
 
 mdLinks('./some/example.md').then( links => {
  // => [{ href, text, file }, ...]
@@ -57,7 +66,6 @@ mdLinks('./some/example.md', {stats : true, validate:true }).then(arrayOfLinks =
 .catch( err => console.error(err))
 
 ```
-
 
 ### RESPONSE
 
@@ -153,9 +161,9 @@ Unique : 3
 Broken : 1
 ```
 ## Contributing
-Pull requests are welcome. For major changes, please open an [issue]("https://github.com/AlissonCH/alicruzh-md-link/sissues") first to discuss what you would like to change.
+Pull requests are welcome. For major changes, please open an [issues](https://github.com/AlissonCH/alicruz-mdlinks/issues) first to discuss what you would like to change.
 
 Please make sure to update tests as appropriate.
-[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](CODE_OF_CONDUCT.md)
+
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)

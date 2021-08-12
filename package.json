@@ -1,5 +1,5 @@
 {
-  "name": "alicruzh-md-links",
+  "name": "alicruz-mdlinks",
   "version": "1.0.0",
   "description": "Validate unbroken links from a markdown file and report some statistics",
   "main": "src/mdLinks.js",
@@ -22,14 +22,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AlissonCH/alich-md-links.git"
+    "url": "git+https://github.com/AlissonCH/alicruz-mdlinks.git"
   },
   "author": "Rocio Alisson Cruz Holguin <rocio.cruz@unmsm.edu.pe>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/AlissonCH/alich-md-links/issues"
+    "url": "https://github.com/AlissonCH/alicruz-mdlinks/issues"
   },
-  "homepage": "https://github.com/AlissonCH/alich-md-links#readme",
+  "homepage": "https://github.com/AlissonCH/alicruz-mdlinks#readme",
   "dependencies": {
     "axios": "^0.21.1",
     "colors": "^1.4.0",

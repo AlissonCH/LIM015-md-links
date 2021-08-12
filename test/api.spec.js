@@ -112,9 +112,9 @@ describe("toPathAbsolute", () => {
   it(`should be "C:\\Users\\aliss\\Desktop\\Proyectos-laboratoria\\prueba\\cipher.md" to "..//prueba//cipher"`, () => {
     expect(toPathAbsolute("..//prueba//cipher")).toBe(pathA);
   });
-  it(`should be "C:\\Users\\aliss\\Desktop\\Proyectos-laboratoria\\alicruzh-md-links\\readme.md" to "./readme"`, () => {
+  it(`should be "C:\\Users\\aliss\\Desktop\\Proyectos-laboratoria\\alicruz-mdlinks\\readme.md" to "./readme"`, () => {
     expect(toPathAbsolute("./readme")).toBe(
-      "C:\\Users\\aliss\\Desktop\\Proyectos-laboratoria\\alicruzh-md-links\\readme.md"
+      "C:\\Users\\aliss\\Desktop\\Proyectos-laboratoria\\alicruz-mdlinks\\readme.md"
     );
   });
 });
