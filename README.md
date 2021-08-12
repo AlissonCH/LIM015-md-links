@@ -33,7 +33,7 @@ Returns:
 ### Examples
 
 ```javascript
-const mdLinks = require('../alicruzh-mdlinks');
+const mdLinks = require('../alicruz-mdlinks');
 
 mdLinks('./some/example.md').then( links => {
  // => [{ href, text, file }, ...]
