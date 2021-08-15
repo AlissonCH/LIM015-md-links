@@ -88,13 +88,13 @@ const showResultsInCli = (result) => {
       return console.log(usageMessage());
     } else {
       return result.forEach((item) => {
-        console.log(
-          `${item["file"]}`,
-          `${item["href"]}`.blue,
-          `${item["status"] ? item["status"] : ""}`.green,
-          `${item["statusText"] ? item["statusText"] : ""}`.magenta,
-          `${item["text"]}`
+        process.stdout.write(`${item["file"]}`);
+        process.stdout.write(` ${item["href"]}`.blue);
+        process.stdout.write(` ${item["status"] ? item["status"] : ""}`.green);
+        process.stdout.write(
+          ` ${item["statusText"] ? item["statusText"] : ""}`.magenta
         );
+        process.stdout.write(` ${item["text"]}\n`);
       });
     }
   }
@@ -106,14 +106,14 @@ function cli() {
       .then((result) => {
         if (!result) {
           const message = options();
-          return console.log(message);
+          process.stdout.write(message);
         } else {
           showResultsInCli(result);
         }
       })
       .catch((err) => console.error(err));
   } else {
-    return console.log(usageMessage());
+    return process.stdout.write(usageMessage());
   }
 }
 cli();

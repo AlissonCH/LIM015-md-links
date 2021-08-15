@@ -17,8 +17,7 @@
   "scripts": {
     "test": "jest --verbose --coverage",
     "lint": "eslint .  --ext .js",
-    "lint-fix": "eslint . --ext .js --fix",
-    "build": "microbundle"
+    "lint-fix": "eslint . --ext .js --fix"
   },
   "repository": {
     "type": "git",

@@ -103,10 +103,9 @@ const statistics = (arrayOfLinks) => {
     const total = arrayOfLinks.length;
     const stats = {};
     stats["Total"] = total;
-    let unique = [];
+    const unique = [];
     arrayOfLinks.forEach((link) => {
-      let index = unique.indexOf(link["href"]);
-      // console.log(index);
+      const index = unique.indexOf(link["href"]);
       if (index === -1) {
         unique.push(link["href"]);
       }
