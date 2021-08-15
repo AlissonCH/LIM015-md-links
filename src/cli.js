@@ -32,8 +32,8 @@ const usageMessage = () => {
 };
 
 function options() {
-  let secondArgument = process.argv[3];
-  let thirdArgument = process.argv[4];
+  const secondArgument = process.argv[3];
+  const thirdArgument = process.argv[4];
   if (!secondArgument) {
     return false;
   } else {
@@ -100,7 +100,7 @@ const showResultsInCli = (result) => {
   }
 };
 function cli() {
-  let firstArgument = process.argv[2];
+  const firstArgument = process.argv[2];
   if (firstArgument) {
     mdLinks(firstArgument, options())
       .then((result) => {

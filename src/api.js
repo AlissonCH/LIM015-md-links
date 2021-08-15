@@ -1,4 +1,4 @@
-const fs = require("fs"); // usando modulos COMMONJS
+const fs = require("fs");
 const path = require("path");
 const md = require("markdown-it")({
   html: true,
@@ -25,13 +25,11 @@ function readFile(pathAbsolute) {
 function toPathAbsolute(pathFile) {
   let pathAbsolute;
   if (path.isAbsolute(pathFile)) {
-    // path es absoluto
     let { dir, base, ext, name } = path.parse(pathFile);
     ext === "" ? (ext = ".md") : ext;
     base = name + ext;
     pathAbsolute = path.join(dir, base);
   } else {
-    // path es relativo
     const cwd = process.cwd();
     let { dir, base, ext, name } = path.parse(pathFile);
     ext === "" ? (ext = ".md") : ext;
@@ -72,7 +70,7 @@ function arrayOfLinks(dataFile, pathAbsolute) {
 function arrayOfLinksWithStatus(arrayOfLinks) {
   const arrayOfPromises = [];
   arrayOfLinks.forEach((link) => {
-    let promise = new Promise((resolve) => {
+    const promise = new Promise((resolve) => {
       axios
         .get(link.href)
         .then((response) => {
@@ -103,14 +101,8 @@ const statistics = (arrayOfLinks) => {
     const total = arrayOfLinks.length;
     const stats = {};
     stats["Total"] = total;
-    let unique = [];
-    arrayOfLinks.forEach((link) => {
-      let index = unique.indexOf(link["href"]);
-      // console.log(index);
-      if (index === -1) {
-        unique.push(link["href"]);
-      }
-    });
+    const hrefs = arrayOfLinks.map((link) => link["href"]);
+    const unique = [...new Set(hrefs)];
     stats["Unique"] = unique.length;
     validate(stats);
   });
@@ -119,15 +111,11 @@ const statsAndValidate = (arrayOfLinksWithStatus) => {
   return new Promise((resolve) => {
     statistics(arrayOfLinksWithStatus).then((stats) => {
       let broken = 0;
-      // let errorRequest = 0;
       arrayOfLinksWithStatus.forEach((link) => {
         if (link["status"] >= 400) {
           broken = broken + 1;
-          // } else if (!link["statusText"]) {
-          //   errorRequest += 1;
         }
       });
-      // stats["ErrorRequest"] = errorRequest;
       stats["Broken"] = broken;
       resolve(stats);
     });
@@ -135,7 +123,7 @@ const statsAndValidate = (arrayOfLinksWithStatus) => {
 };
 
 function cases(options, dataFile, pathAbsolute) {
-  let { validate, stats } = options;
+  const { validate, stats } = options;
   if (!options) {
     return new Promise((resolve) => {
       resolve(arrayOfLinks(dataFile, pathAbsolute));
@@ -155,7 +143,7 @@ function cases(options, dataFile, pathAbsolute) {
 function ifPathIsDir(dir, options) {
   const arrayOfPromises = [];
   function crawl(dir) {
-    let files = fs.readdirSync(dir);
+    const files = fs.readdirSync(dir);
     for (let i = 0; i < files.length; i++) {
       const next = path.resolve(path.join(dir, files[i]));
       if (fs.lstatSync(next).isDirectory() === true) {

@@ -1,6 +1,6 @@
 {
   "name": "alicruz-mdlinks",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Validate unbroken links from a markdown file and report some statistics",
   "main": "src/mdLinks.js",
   "keywords": [
@@ -18,7 +18,7 @@
     "test": "jest --verbose --coverage",
     "lint": "eslint .  --ext .js",
     "lint-fix": "eslint . --ext .js --fix",
-    "build": "microbundle"
+    "start": "node src/cli"
   },
   "repository": {
     "type": "git",
