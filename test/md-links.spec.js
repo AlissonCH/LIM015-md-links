@@ -15,31 +15,37 @@ const links = [
     href: linkOk,
     text: "Título1",
     file: pathA,
+    line: 10,
   },
   {
     href: linkRoto,
     text: "TítuloRoto",
     file: pathA,
+    line: 8,
   },
   {
     href: linkOk,
     text: "Título1",
     file: pathA,
+    line: 10,
   },
   {
     href: failRequest,
     text: "TítuloFailHttpRequest",
     file: pathA,
+    line: 12,
   },
   {
     href: hipervinculo,
     text: "TituloHipervinculo",
     file: pathA,
+    line: undefined,
   },
   {
     href: linkOk,
     text: "Título1",
     file: pathA,
+    line: 10,
   },
 ];
 const linksWithStatus = [
@@ -49,6 +55,7 @@ const linksWithStatus = [
     file: pathA,
     status: 200,
     statusText: "OK",
+    line: 10,
   },
   {
     href: linkRoto,
@@ -56,6 +63,7 @@ const linksWithStatus = [
     file: pathA,
     status: 400,
     statusText: "FAIL",
+    line: 8,
   },
   {
     href: linkOk,
@@ -63,6 +71,7 @@ const linksWithStatus = [
     file: pathA,
     status: 200,
     statusText: "OK",
+    line: 10,
   },
   {
     href: failRequest,
@@ -70,12 +79,14 @@ const linksWithStatus = [
     file: pathA,
     status: null,
     statusText: "HTTP Error request: errorRequest",
+    line: 12,
   },
   {
     href: hipervinculo,
     text: "TituloHipervinculo",
     file: pathA,
     status: null,
+    line: undefined,
   },
   {
     href: linkOk,
@@ -83,6 +94,7 @@ const linksWithStatus = [
     file: pathA,
     status: 200,
     statusText: "OK",
+    line: 10,
   },
 ];
 

@@ -91,7 +91,10 @@ const showResultsInCli = (result) => {
         process.stdout.write(
           `${item["statusText"] ? item["statusText"] : ""} `.magenta
         );
-        process.stdout.write(`${item["text"]}`);
+        process.stdout.write(`${item["text"]} `);
+        process.stdout.write(
+          `${item["line"] ? "ln: " + item["line"] : ""}`.yellow
+        );
       });
     }
   }

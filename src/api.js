@@ -13,11 +13,8 @@ require("colors");
 function readFile(pathAbsolute) {
   return new Promise((resolve, reject) => {
     fs.readFile(pathAbsolute, "utf-8", (err, fileData) => {
-      if (err) {
-        reject(`${"ERROR: ".red} ${err}`);
-      } else {
-        resolve(fileData);
-      }
+      if (err) return reject(`${"ERROR: ".red} ${err}`);
+      else return resolve(fileData);
     });
   });
 }
@@ -41,6 +38,7 @@ function toPathAbsolute(pathFile) {
 }
 
 function arrayOfLinks(dataFile, pathAbsolute) {
+  const lines = dataFile.split(/\r?\n/);
   const renderFile = md.render(dataFile); // string to HTML
   const dom = new JSDOM(renderFile); // transform HTML to DOM
   const a = dom.window.document.querySelectorAll("a"); // 'NodeList'
@@ -48,19 +46,33 @@ function arrayOfLinks(dataFile, pathAbsolute) {
   const arrayOfLinks = new Array();
   a.forEach((a) => {
     const { href, text } = a;
+    let line;
+    lines.forEach((ln) => {
+      if (ln.toUpperCase().includes(href.toUpperCase())) {
+        line = lines.indexOf(ln) + 1;
+      }
+    });
     const link = {};
     link["href"] = href;
     link["text"] = text;
     link["file"] = pathAbsolute;
+    link["line"] = line;
     arrayOfLinks.push(link);
   });
   if (img) {
     img.forEach((img) => {
       const { src, alt } = img;
+      let line;
+      lines.forEach((ln) => {
+        if (ln.toUpperCase().includes(src.toUpperCase())) {
+          line = lines.indexOf(ln) + 1;
+        }
+      });
       const link = {};
       link["href"] = src;
       link["text"] = alt;
       link["file"] = pathAbsolute;
+      link["line"] = line;
       arrayOfLinks.push(link);
     });
   }
@@ -109,11 +121,9 @@ const statsAndValidate = (arrayOfLinksWithStatus) => {
   return new Promise((resolve) => {
     statistics(arrayOfLinksWithStatus).then((stats) => {
       let broken = 0;
-      arrayOfLinksWithStatus.forEach((link) => {
-        if (link["status"] >= 400) {
-          broken = broken + 1;
-        }
-      });
+      arrayOfLinksWithStatus.forEach((link) =>
+        link.status >= 400 ? (broken += 1) : false
+      );
       stats["Broken"] = broken;
       resolve(stats);
     });
@@ -170,7 +180,7 @@ function ifPathIsDir(dir, options) {
       }, []);
       if (result[0] === undefined) {
         reject(
-          `${"ERROR:".red} Not found file(s) with 'md' ext at dir: ${dir}`
+          `${"ERROR:".red} Not found file(s) with 'md' extension at dir: ${dir}`
         );
       }
       resolve(acum);
