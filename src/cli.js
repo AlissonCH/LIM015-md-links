@@ -15,12 +15,13 @@ const usageMessage = () => {
   Description of arguments:
   ${
     `[<path>]`.blue
-  }                   Must be a string, it can be file with extension '.md' or dir 
-  ${`[--validate]`.blue}              Http status request for each link in md
-  ${`[--stats]`.blue}                 General statistics of links
-  ${`[--stats]`.blue} ${
+  }                  Must be a string, it can be file with extension '.md' or directory. 
+  ${
     `[--validate]`.blue
-  }    Statistics of links with links with http request
+  }              Http status for each link in markdown file.
+  ${`[--stats]`.blue}                 General statistics of links.
+  ${`[--stats]`.blue} ${`[--validate]`.blue}    Statistics of links with status.
+  ${`[--validate]`.blue} ${`[--stats]`.blue}    Statistics of links with status.
 
   For example: 
       md-links ${"readme.md".blue} <path>
@@ -52,28 +53,24 @@ function options() {
 }
 
 const showStatsInCli = (result) => {
-  return console.log(`
-${"Total: ".blue} ${result["Total"]}
-${"Unique: ".blue} ${result["Unique"]}
-${result["Broken"] ? `${"Broken".blue} ${result["Broken"]}` : ""}
-${
-  result["ErrorRequest"]
-    ? `${"Error Request:".red} ${result["ErrorRequest"]}`
-    : ""
-}`);
+  process.stdout.write(`\n${"Total: ".blue} ${result["Total"]}\n`);
+  process.stdout.write(`${"Unique: ".blue} ${result["Unique"]}\n`);
+  process.stdout.write(
+    `${
+      result["Broken"] || result["Broken"] === 0
+        ? `${"Broken".blue} ${result["Broken"]}`
+        : ""
+    }\n`
+  );
 };
 
 function acum(result) {
-  const acum = result.reduce(
-    ({ Total = 0, Unique = 0, Broken = 0, ErrorRequest = 0 }, item) => {
-      Total += item.Total;
-      Unique += item.Unique;
-      Broken += item.Broken;
-      ErrorRequest += item.ErrorRequest;
-      return { Total, Unique, Broken, ErrorRequest };
-    },
-    {}
-  );
+  const acum = result.reduce(({ Total = 0, Unique = 0, Broken = 0 }, item) => {
+    Total += item.Total;
+    Unique += item.Unique;
+    Broken += item.Broken;
+    return { Total, Unique, Broken };
+  }, {});
   return acum;
 }
 const showResultsInCli = (result) => {
@@ -88,13 +85,13 @@ const showResultsInCli = (result) => {
       return console.log(usageMessage());
     } else {
       return result.forEach((item) => {
-        console.log(
-          `${item["file"]}`,
-          `${item["href"]}`.blue,
-          `${item["status"] ? item["status"] : ""}`.green,
-          `${item["statusText"] ? item["statusText"] : ""}`.magenta,
-          `${item["text"]}`
+        process.stdout.write(`\n${item["file"]} `);
+        process.stdout.write(`${item["href"]} `.blue);
+        process.stdout.write(`${item["status"] ? item["status"] : ""} `.green);
+        process.stdout.write(
+          `${item["statusText"] ? item["statusText"] : ""} `.magenta
         );
+        process.stdout.write(`${item["text"]}`);
       });
     }
   }
@@ -105,15 +102,14 @@ function cli() {
     mdLinks(firstArgument, options())
       .then((result) => {
         if (!result) {
-          const message = options();
-          return console.log(message);
+          process.stdout.write(usageMessage());
         } else {
           showResultsInCli(result);
         }
       })
       .catch((err) => console.error(err));
   } else {
-    return console.log(usageMessage());
+    process.stdout.write(usageMessage());
   }
 }
 cli();

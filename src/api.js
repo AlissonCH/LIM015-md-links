@@ -30,13 +30,12 @@ function toPathAbsolute(pathFile) {
     base = name + ext;
     pathAbsolute = path.join(dir, base);
   } else {
-    const cwd = process.cwd();
     let { dir, base, ext, name } = path.parse(pathFile);
     ext === "" ? (ext = ".md") : ext;
     base = name + ext;
     dir !== ""
       ? (pathAbsolute = path.resolve(path.join(dir, base)))
-      : (pathAbsolute = path.join(cwd, base));
+      : (pathAbsolute = path.join(process.cwd(), base));
   }
   return pathAbsolute;
 }
@@ -98,10 +97,9 @@ function arrayOfLinksWithStatus(arrayOfLinks) {
 }
 const statistics = (arrayOfLinks) => {
   return new Promise((validate) => {
-    const total = arrayOfLinks.length;
     const stats = {};
-    stats["Total"] = total;
-    const hrefs = arrayOfLinks.map((link) => link["href"]);
+    stats["Total"] = arrayOfLinks.length;
+    const hrefs = arrayOfLinks.map((link) => link.href);
     const unique = [...new Set(hrefs)];
     stats["Unique"] = unique.length;
     validate(stats);
