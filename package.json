@@ -1,6 +1,6 @@
 {
   "name": "alicruz-mdlinks",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Validate unbroken links from a markdown file and report some statistics",
   "main": "src/mdLinks.js",
   "keywords": [
