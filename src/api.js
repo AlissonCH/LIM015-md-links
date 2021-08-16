@@ -10,16 +10,16 @@ const { JSDOM } = jsdom;
 const axios = require("axios");
 require("colors");
 
-function readFile(pathAbsolute) {
+const readFile = (pathAbsolute) => {
   return new Promise((resolve, reject) => {
     fs.readFile(pathAbsolute, "utf-8", (err, fileData) => {
       if (err) return reject(`${"ERROR: ".red} ${err}`);
       else return resolve(fileData);
     });
   });
-}
+};
 
-function toPathAbsolute(pathFile) {
+const toPathAbsolute = (pathFile) => {
   let pathAbsolute;
   if (path.isAbsolute(pathFile)) {
     let { dir, base, ext, name } = path.parse(pathFile);
@@ -35,9 +35,9 @@ function toPathAbsolute(pathFile) {
       : (pathAbsolute = path.join(process.cwd(), base));
   }
   return pathAbsolute;
-}
+};
 
-function arrayOfLinks(dataFile, pathAbsolute) {
+const arrayOfLinks = (dataFile, pathAbsolute) => {
   const lines = dataFile.split(/\r?\n/);
   const renderFile = md.render(dataFile); // string to HTML
   const dom = new JSDOM(renderFile); // transform HTML to DOM
@@ -77,8 +77,8 @@ function arrayOfLinks(dataFile, pathAbsolute) {
     });
   }
   return arrayOfLinks;
-}
-function arrayOfLinksWithStatus(arrayOfLinks) {
+};
+const arrayOfLinksWithStatus = (arrayOfLinks) => {
   const arrayOfPromises = [];
   arrayOfLinks.forEach((link) => {
     const promise = new Promise((resolve) => {
@@ -106,7 +106,7 @@ function arrayOfLinksWithStatus(arrayOfLinks) {
     arrayOfPromises.push(promise);
   });
   return Promise.all(arrayOfPromises);
-}
+};
 const statistics = (arrayOfLinks) => {
   return new Promise((validate) => {
     const stats = {};
@@ -130,7 +130,7 @@ const statsAndValidate = (arrayOfLinksWithStatus) => {
   });
 };
 
-function cases(options, dataFile, pathAbsolute) {
+const cases = (options, dataFile, pathAbsolute) => {
   const { validate, stats } = options;
   if (!options) {
     return new Promise((resolve) => {
@@ -147,8 +147,8 @@ function cases(options, dataFile, pathAbsolute) {
   } else {
     return false;
   }
-}
-function ifPathIsDir(dir, options) {
+};
+const ifPathIsDir = (dir, options) => {
   const arrayOfPromises = [];
   function crawl(dir) {
     const files = fs.readdirSync(dir);
@@ -186,7 +186,7 @@ function ifPathIsDir(dir, options) {
       resolve(acum);
     });
   });
-}
+};
 module.exports = {
   readFile,
   toPathAbsolute,

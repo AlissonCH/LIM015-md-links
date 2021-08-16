@@ -3,7 +3,7 @@ require("colors");
 const mdLinks = require("./mdLinks.js");
 
 const usageMessage = () => {
-  const message = `
+  return `
   ${"=========================================================".blue}
   ${"                     MD-LINKS USAGE".blue}
   ${"=========================================================".blue}
@@ -29,7 +29,6 @@ const usageMessage = () => {
       md-links ${"C:\\A\\B\\readme.md".blue} <path> ${`--stats`.blue}
       md-links ${"C:\\A\\B\\".blue} <path> ${`--stats --validate`.blue}
   `;
-  return message;
 };
 
 function options() {
@@ -53,18 +52,18 @@ function options() {
 }
 
 const showStatsInCli = (result) => {
-  process.stdout.write(`\n${"Total: ".blue} ${result["Total"]}\n`);
-  process.stdout.write(`${"Unique: ".blue} ${result["Unique"]}\n`);
-  process.stdout.write(
-    `${
-      result["Broken"] || result["Broken"] === 0
-        ? `${"Broken".blue} ${result["Broken"]}`
-        : ""
-    }\n`
-  );
+  process.stdout.write(`
+  ${"Total: ".blue} ${result["Total"]}
+  ${"Unique: ".blue} ${result["Unique"]}
+  ${
+    result["Broken"] || result["Broken"] === 0
+      ? `${"Broken: ".blue} ${result["Broken"]}`
+      : ""
+  }
+  `);
 };
 
-function acum(result) {
+const acum = (result) => {
   const acum = result.reduce(({ Total = 0, Unique = 0, Broken = 0 }, item) => {
     Total += item.Total;
     Unique += item.Unique;
@@ -72,13 +71,11 @@ function acum(result) {
     return { Total, Unique, Broken };
   }, {});
   return acum;
-}
+};
 const showResultsInCli = (result) => {
   if (!Array.isArray(result)) {
-    // result is not an array
     return showStatsInCli(result);
   } else {
-    //result is an array
     if (result[0]["Total"]) {
       return showStatsInCli(acum(result));
     } else if (result[0] === false) {
@@ -99,7 +96,7 @@ const showResultsInCli = (result) => {
     }
   }
 };
-function cli() {
+const cli = () => {
   const firstArgument = process.argv[2];
   if (firstArgument) {
     mdLinks(firstArgument, options())
@@ -114,5 +111,5 @@ function cli() {
   } else {
     process.stdout.write(usageMessage());
   }
-}
+};
 cli();
