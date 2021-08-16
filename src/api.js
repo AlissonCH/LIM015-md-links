@@ -1,3 +1,4 @@
+require("dotenv").config({ path: "./.env" });
 const fs = require("fs");
 const path = require("path");
 const md = require("markdown-it")({
@@ -187,6 +188,8 @@ const ifPathIsDir = (dir, options) => {
     });
   });
 };
+// const USER_ID = process.env.USER_ID;
+
 module.exports = {
   readFile,
   toPathAbsolute,

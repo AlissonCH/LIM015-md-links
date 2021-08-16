@@ -3,10 +3,15 @@ require("colors");
 const mdLinks = require("./mdLinks.js");
 
 const usageMessage = () => {
-  return `
-  ${"=========================================================".blue}
-  ${"                     MD-LINKS USAGE".blue}
-  ${"=========================================================".blue}
+  return `${
+    "  ==========================================================================================================================="
+      .blue
+  }
+  ${"                                                 MD-LINKS USAGE".blue}
+  ${
+    "==========================================================================================================================="
+      .blue
+  }
   md-links${`[<path>]`.blue}
   md-links${`[<path>]`.blue} ${`[--validate]`.blue}
   md-links${`[<path>]`.blue} ${`[--stats]`.blue}
@@ -15,7 +20,8 @@ const usageMessage = () => {
   Description of arguments:
   ${
     `[<path>]`.blue
-  }                  Must be a string, it can be file with extension '.md' or directory. 
+  }                  It can be file with extension '.md' or directory, It is recommended that the path be a string to avoid path 
+                            recognition problems in different execution environments.
   ${
     `[--validate]`.blue
   }              Http status for each link in markdown file.
@@ -107,7 +113,7 @@ const cli = () => {
           showResultsInCli(result);
         }
       })
-      .catch((err) => console.error(err));
+      .catch((err) => process.stderr.write(`\n${err}\n`));
   } else {
     process.stdout.write(usageMessage());
   }

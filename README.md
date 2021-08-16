@@ -143,14 +143,6 @@ Parameters:
 - ``path`` absolute or relative path with a markdown file. Or directory with markdown files. It is recommended that the path be a string to avoid path recognition problems in different execution environments.
 - ``options`` is an object, the default value is false. Could be --validate, --stats, or both.
 
-Returns:
-
-- An array containing objects for each link found. Each Link containing the following properties: 'href': (url), 'text' : (text associated to the link), 'file' : (path where the links were found).
-- when  ``options`` = { validate : true }. Each Link containing the following properties : 'href', 'text', 'file', 'status', 'statusText'.
-- when  ``options`` = { stats : true } returns an object with the following properties : 'Total': (the total links found), 'Unique': (unique links).
-- when  ``options`` = { stats : true, validate : true } returns an object with the following properties : 'Total': (Total links found), 'Unique': (Unique links ), 'Broken: (Broken links found).
-
-
 ### Examples
 
 ```javascript
