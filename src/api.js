@@ -149,47 +149,25 @@ const cases = (options, dataFile, pathAbsolute) => {
     return false;
   }
 };
-const ifPathIsDir = (dir, options) => {
-  const arrayOfPromises = [];
-  function crawl(dir) {
+
+const arrayOfMdFiles = (dir) => {
+  const mdFiles = [];
+  const extractMdFiles = (dir) => {
     const files = fs.readdirSync(dir);
     for (let i = 0; i < files.length; i++) {
       const next = path.resolve(path.join(dir, files[i]));
       if (fs.lstatSync(next).isDirectory() === true) {
-        crawl(next);
+        extractMdFiles(next);
       } else {
-        let promise;
-        let { ext } = path.parse(next);
-        if (ext === ".md") {
-          promise = new Promise((resolve) => {
-            readFile(next)
-              .then((dataFile) => cases(options, dataFile, next))
-              .then((result) => {
-                resolve(result);
-              });
-          });
+        if (path.extname(next) === ".md") {
+          mdFiles.push(next);
         }
-        arrayOfPromises.push(promise);
       }
     }
-  }
-  crawl(dir);
-  return new Promise((resolve, reject) => {
-    Promise.all(arrayOfPromises).then((result) => {
-      const acum = result.reduce((acum, item) => {
-        return acum.concat(item);
-      }, []);
-      if (result[0] === undefined) {
-        reject(
-          `${"ERROR:".red} Not found file(s) with 'md' extension at dir: ${dir}`
-        );
-      }
-      resolve(acum);
-    });
-  });
+  };
+  extractMdFiles(dir);
+  return mdFiles;
 };
-// const USER_ID = process.env.USER_ID;
-
 module.exports = {
   readFile,
   toPathAbsolute,
@@ -198,5 +176,5 @@ module.exports = {
   statistics,
   statsAndValidate,
   cases,
-  ifPathIsDir,
+  arrayOfMdFiles,
 };
